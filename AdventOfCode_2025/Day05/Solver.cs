@@ -9,7 +9,7 @@
             var (ranges, ingredients) = ParseInput(inputFilePath);
 
             Console.WriteLine($"Day 5 part 1: {SolvePart1(ranges, ingredients)}");
-            //Console.WriteLine($"Day 5 part 2: {SolvePart2(grid)}");
+            Console.WriteLine($"Day 5 part 2: {SolvePart2(ranges)}");
         }
 
         internal static (List<Range>, List<long>) ParseInput(string inputFilePath)
@@ -51,6 +51,25 @@
                 }
             }
             return nbFreshIngredients;
+        }
+
+        private static long SolvePart2(List<Range> ranges)
+        {
+            long nbFreshIngredientIds = 0;
+            long maxFreshId = -1;
+
+            var rangesSorted = ranges.OrderBy(r => r.Start).ToList();
+            foreach (var range in rangesSorted)
+            {
+                long trueStart = Math.Max(range.Start, maxFreshId + 1);
+                if (trueStart <= range.End)
+                {
+                    nbFreshIngredientIds += (range.End - trueStart + 1);
+                    maxFreshId = range.End;
+                }
+            }
+            
+            return nbFreshIngredientIds;
         }
     }
 }

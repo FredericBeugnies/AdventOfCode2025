@@ -4,4 +4,5 @@
 //AdventOfCode_2025.Day04.Solver.Solve("input04.txt");
 //AdventOfCode_2025.Day05.Solver.Solve("input05.txt");
 //AdventOfCode_2025.Day06.Solver.Solve("input06.txt");
-AdventOfCode_2025.Day07.Solver.Solve("input07.txt");
+//AdventOfCode_2025.Day07.Solver.Solve("input07.txt");
+AdventOfCode_2025.Day08.Solver.Solve("input08.txt");

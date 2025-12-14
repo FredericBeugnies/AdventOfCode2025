@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace AdventOfCode_2025.Day11
+﻿namespace AdventOfCode_2025.Day11
 {
     internal class Solver
     {
@@ -16,48 +10,36 @@ namespace AdventOfCode_2025.Day11
             var nodeIndex = new Dictionary<string, int>();
             int i = 0;
             foreach (var line in lines)
-            {
-                string nodeName = line[..3];
-                nodeIndex[nodeName] = i++;
-            }
+                nodeIndex[line[..3]] = i++;
             nodeIndex["out"] = i++;
 
             int nbNodes = nodeIndex.Count;
-            long[,,] nbPaths = new long[nbNodes, nbNodes, nbNodes];
+            bool[,] adjacency = new bool[nbNodes, nbNodes];
             foreach (var line in lines)
             {
-                string fromNode = line[..3];
-                int fromNodeIdx = nodeIndex[fromNode];
-                var toNodes = line[4..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
-                foreach (string toNode in toNodes)
-                {
-                    int toNodeIdx = nodeIndex[toNode];
-                    nbPaths[fromNodeIdx, toNodeIdx, 1] = 1;
-                }
+                int fromIdx = nodeIndex[line[..3]];
+                var neighbors = line[4..].Split(' ', StringSplitOptions.RemoveEmptyEntries);
+                foreach (string neighbor in neighbors)
+                    adjacency[fromIdx, nodeIndex[neighbor]] = true;
             }
 
             // solve part 1
+            long[,] nbPaths = new long[nbNodes, nbNodes]; // nbPaths[j, k] = number of paths from start point to node 'j' of length 'k'
+
+            int youIdx = nodeIndex["you"];
+            for (int j = 0; j < nbNodes; ++j)
+                nbPaths[j, 1] = adjacency[youIdx, j] ? 1 : 0;
+            
             for (int k = 2; k < nbNodes; ++k)
-            {
-                Console.WriteLine($"k = {k}");
-                for (int iNode = 0; iNode < nbNodes; ++iNode)
-                {
-                    for (int jNode = 0; jNode < nbNodes; ++jNode)
-                    {
-                        for (int mNode = 0; mNode < nbNodes; ++mNode)
-                        {
-                            if (nbPaths[mNode, jNode, 1] != 0)
-                                nbPaths[iNode, jNode, k] += nbPaths[iNode, mNode, k - 1];
-                        }
-                    }
-                }
-            }
+                for (int j = 0; j < nbNodes; ++j)
+                    for (int m = 0; m < nbNodes; ++m)
+                        if (adjacency[m, j])
+                            nbPaths[j, k] += nbPaths[m, k - 1];
 
             long res = 0;
-            int youIdx = nodeIndex["you"];
             int outIdx = nodeIndex["out"];
             for (int k = 0; k < nbNodes; ++k)
-                res += nbPaths[youIdx, outIdx, k];
+                res += nbPaths[outIdx, k];
             Console.WriteLine($"Day 11 part 1: {res}");
         }
     }

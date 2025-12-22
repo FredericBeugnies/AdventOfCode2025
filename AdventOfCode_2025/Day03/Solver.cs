@@ -7,7 +7,7 @@
             var banks = ParseInput(inputFilePath);
 
             Console.WriteLine($"Day 3 part 1: {SolvePart1(banks)}");
-            //Console.WriteLine($"Day 3 part 2: {SolvePart2(banks)}");
+            Console.WriteLine($"Day 3 part 2: {SolvePart2(banks)}");
         }
 
         private static List<int[]> ParseInput(string inputFilePath)
@@ -79,75 +79,45 @@
 
         private static long FindMaxPossibleJoltage_Part2(int[] bank)
         {
-            // find next local maximum
-            int i = 0;
             int remainingRemovals = bank.Length - 12;
             bool[] removed = new bool[bank.Length];
 
+            int i = 0;
             while (remainingRemovals > 0 && i < bank.Length)
             {
-                int local_max_index = -1;
-                int local_max = 0;
-                for (int j = i; j < Math.Min(i + remainingRemovals + 1, bank.Length); ++j)
-                {
-                    if (bank[j] > local_max)
+                int m = i;
+                for (int j = i + 1; j < bank.Length && j <= i + remainingRemovals; ++j)
+                    if (bank[j] > bank[m])
+                        m = j;
+                
+                for (int j = i; j < m; ++j)
+                    if (bank[j] < bank[m])
                     {
-                        local_max = bank[j];
-                        local_max_index = j;
-                    }
-                }
-
-                if (local_max_index != i)
-                {
-                    for (int k = i; k < local_max_index; ++k)
-                    {
-                        removed[k] = true;
+                        removed[j] = true;
                         --remainingRemovals;
                     }
-                    i = local_max_index + 1;
-                }
-                else if (bank[i] == bank[i+1])
-                {
-                    removed[i] = true;
-                    --remainingRemovals;
-                    ++i;
-                }
-                else
-                {
-                    ++i;
-                }
+                
+                i = m + 1;
             }
 
+            if (remainingRemovals > 0)
+                for (int j = bank.Length - 1; j >= 0 && remainingRemovals > 0; --j)
+                    if (!removed[j])
+                    {
+                        removed[j] = true;
+                        --remainingRemovals;
+                    }
 
-            //int i = 0;
-            //int digitToRemove = 1;
-            //while (nbRemainingDigits > 12)
-            //{
-            //    if (!removed[i] && bank[i] == digitToRemove)
-            //    {
-            //        removed[i] = true;
-            //        --nbRemainingDigits;
-            //    }
-            //    ++i;
-            //    if (i == bank.Length)
-            //    {
-            //        // debug
-            //        for (int j = 0; j < bank.Length; ++j)
-            //            if (!removed[j])
-            //                Console.Write(bank[j]);
-            //        Console.WriteLine($"nbRemainingDigits: {nbRemainingDigits}");
-            //        i = 0;
-            //        ++digitToRemove;
-            //    }
-            //}
+            return GetJoltage(bank, removed);
+        }
 
-            long maxJoltage = 0;
-            for (i = 0; i < bank.Length; ++i)
-            {
+        private static long GetJoltage(int[] bank, bool[] removed)
+        {
+            long joltage = 0;
+            for (int i = 0; i < bank.Length; ++i)
                 if (!removed[i])
-                    maxJoltage = maxJoltage * 10 + bank[i];
-            }
-            return maxJoltage;
+                    joltage = joltage * 10 + bank[i];
+            return joltage;
         }
     }
 }

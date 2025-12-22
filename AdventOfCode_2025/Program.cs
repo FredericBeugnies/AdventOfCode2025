@@ -1,6 +1,6 @@
 ﻿//AdventOfCode_2025.Day01.Solver.Solve("input01.txt");
 //AdventOfCode_2025.Day02.Solver.Solve("input02.txt");
-//AdventOfCode_2025.Day03.Solver.Solve("input03.txt");
+AdventOfCode_2025.Day03.Solver.Solve("input03.txt");
 //AdventOfCode_2025.Day04.Solver.Solve("input04.txt");
 //AdventOfCode_2025.Day05.Solver.Solve("input05.txt");
 //AdventOfCode_2025.Day06.Solver.Solve("input06.txt");
@@ -8,4 +8,5 @@
 //AdventOfCode_2025.Day08.Solver.Solve("input08.txt");
 //AdventOfCode_2025.Day09.Solver.Solve("input09.txt");
 //AdventOfCode_2025.Day10.Solver.Solve("input10.txt");
-AdventOfCode_2025.Day11.Solver.Solve("input11.txt");
+//AdventOfCode_2025.Day11.Solver.Solve("input11.txt");
+//AdventOfCode_2025.Day12.Solver.Solve("input12.txt");
